@@ -1,0 +1,2435 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skill Tree — Architect's Roadmap</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=DM+Mono:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #08101f;
+        --orb1: rgba(0, 122, 255, 0.26);
+        --orb2: rgba(10, 180, 255, 0.14);
+        --orb3: rgba(88, 50, 230, 0.11);
+        --glass: rgba(255, 255, 255, 0.055);
+        --glass-hov: rgba(255, 255, 255, 0.085);
+        --glass-act: rgba(0, 122, 255, 0.1);
+        --border: rgba(255, 255, 255, 0.095);
+        --border-hi: rgba(255, 255, 255, 0.18);
+        --border-act: rgba(0, 122, 255, 0.4);
+        --shine: rgba(255, 255, 255, 0.055);
+        --blur: blur(24px) saturate(180%);
+        --blur-hvy: blur(40px) saturate(200%);
+        --blue: #007aff;
+        --blue2: #40aaff;
+        --cyan: #32ade6;
+        --green: #30d158;
+        --yellow: #ffd60a;
+        --red: #ff453a;
+        --t1: rgba(255, 255, 255, 0.94);
+        --t2: rgba(255, 255, 255, 0.52);
+        --t3: rgba(255, 255, 255, 0.24);
+        --sw: 290px;
+        --hh: 60px;
+        --r1: 20px;
+        --r2: 14px;
+        --r3: 10px;
+      }
+      html.light {
+        --bg: #f0f5fd;
+        --orb1: rgba(0, 122, 255, 0.1);
+        --orb2: rgba(10, 180, 255, 0.07);
+        --orb3: rgba(88, 50, 230, 0.06);
+        --glass: rgba(255, 255, 255, 0.65);
+        --glass-hov: rgba(255, 255, 255, 0.8);
+        --glass-act: rgba(0, 122, 255, 0.07);
+        --border: rgba(0, 0, 0, 0.07);
+        --border-hi: rgba(0, 0, 0, 0.13);
+        --border-act: rgba(0, 122, 255, 0.32);
+        --shine: rgba(255, 255, 255, 0.55);
+        --t1: rgba(0, 0, 0, 0.9);
+        --t2: rgba(0, 0, 0, 0.48);
+        --t3: rgba(0, 0, 0, 0.26);
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        background: var(--bg);
+        color: var(--t1);
+        font-family:
+          "DM Sans",
+          -apple-system,
+          sans-serif;
+        font-size: 14px;
+        line-height: 1.5;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* BG */
+      #bg {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background:
+          radial-gradient(
+            ellipse 80% 60% at 10% 20%,
+            var(--orb1),
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse 60% 50% at 85% 70%,
+            var(--orb2),
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse 50% 60% at 50% 95%,
+            var(--orb3),
+            transparent 60%
+          ),
+          var(--bg);
+      }
+      #grain {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        opacity: 0.022;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        background-size: 128px 128px;
+      }
+
+      /* GLASS SURFACE */
+      .gs {
+        background: var(--glass);
+        backdrop-filter: var(--blur);
+        -webkit-backdrop-filter: var(--blur);
+        border: 1px solid var(--border);
+        position: relative;
+      }
+      .gs::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(135deg, var(--shine) 0%, transparent 50%);
+        pointer-events: none;
+      }
+
+      /* =========================
+   LOGIN
+========================= */
+      #loginScreen {
+        position: fixed;
+        inset: 0;
+        z-index: 9000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .lw {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+        animation: lfi 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+      @keyframes lfi {
+        from {
+          opacity: 0;
+          transform: translateY(20px) scale(0.97);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .licon {
+        width: 76px;
+        height: 76px;
+        border-radius: 22px;
+        background: var(--glass);
+        backdrop-filter: var(--blur-hvy);
+        -webkit-backdrop-filter: var(--blur-hvy);
+        border: 1px solid var(--border-hi);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+      }
+      .licon svg {
+        width: 32px;
+        height: 32px;
+        stroke: var(--blue2);
+        fill: none;
+        stroke-width: 1.5;
+      }
+      .lcard {
+        width: 350px;
+        background: var(--glass);
+        backdrop-filter: var(--blur-hvy);
+        -webkit-backdrop-filter: var(--blur-hvy);
+        border: 1px solid var(--border-hi);
+        border-radius: var(--r1);
+        padding: 34px 30px;
+        box-shadow:
+          0 40px 80px rgba(0, 0, 0, 0.38),
+          0 0 0 0.5px rgba(255, 255, 255, 0.05) inset;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        position: relative;
+      }
+      .lcard::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: var(--r1);
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.07) 0%,
+          transparent 45%
+        );
+        pointer-events: none;
+      }
+      .lt1 {
+        font-size: 21px;
+        font-weight: 700;
+        letter-spacing: -0.4px;
+      }
+      .lt2 {
+        font-size: 12.5px;
+        color: var(--t2);
+        margin-top: 2px;
+      }
+      .llb {
+        font-size: 11.5px;
+        font-weight: 500;
+        color: var(--t2);
+      }
+      .linput {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid var(--border);
+        border-radius: var(--r3);
+        padding: 12px 16px;
+        color: var(--t1);
+        font-family: "DM Mono", monospace;
+        font-size: 16px;
+        letter-spacing: 6px;
+        text-align: center;
+        outline: none;
+        transition: all 0.2s;
+      }
+      .linput:focus {
+        background: rgba(0, 122, 255, 0.08);
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.18);
+      }
+      .linput::placeholder {
+        letter-spacing: 3px;
+        opacity: 0.3;
+      }
+      .lbtn {
+        width: 100%;
+        padding: 13px;
+        background: var(--blue);
+        border: none;
+        border-radius: var(--r3);
+        color: #fff;
+        font-family: "DM Sans", sans-serif;
+        font-size: 14.5px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 22px rgba(0, 122, 255, 0.38);
+        transition: all 0.18s;
+        position: relative;
+        overflow: hidden;
+      }
+      .lbtn::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.14) 0%,
+          transparent 100%
+        );
+      }
+      .lbtn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 30px rgba(0, 122, 255, 0.48);
+      }
+      .lerr {
+        font-size: 11.5px;
+        color: var(--red);
+        min-height: 14px;
+        text-align: center;
+        font-family: "DM Mono", monospace;
+      }
+
+      /* =========================
+   APP
+========================= */
+      #app {
+        display: none;
+        position: relative;
+        z-index: 2;
+        min-height: 100vh;
+      }
+
+      /* HEADER */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        height: var(--hh);
+        background: var(--glass);
+        backdrop-filter: var(--blur-hvy);
+        -webkit-backdrop-filter: var(--blur-hvy);
+        border-bottom: 1px solid var(--border);
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+      }
+      .bdot {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, var(--blue), var(--cyan));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0, 122, 255, 0.38);
+      }
+      .bdot svg {
+        width: 15px;
+        height: 15px;
+        stroke: #fff;
+        fill: none;
+        stroke-width: 2;
+      }
+      .bname {
+        font-size: 14.5px;
+        font-weight: 600;
+        letter-spacing: -0.3px;
+      }
+      .bname em {
+        color: var(--t2);
+        font-style: normal;
+        font-weight: 400;
+      }
+      .hr {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .pill {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--glass);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 5px 13px;
+        font-size: 11.5px;
+        color: var(--t2);
+        font-family: "DM Mono", monospace;
+      }
+      .pill-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--blue);
+      }
+      .hb {
+        background: var(--glass);
+        border: 1px solid var(--border);
+        border-radius: var(--r3);
+        padding: 6px 13px;
+        color: var(--t2);
+        font-family: "DM Sans", sans-serif;
+        font-size: 12.5px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.16s;
+        white-space: nowrap;
+      }
+      .hb:hover {
+        background: var(--glass-hov);
+        border-color: var(--border-hi);
+        color: var(--t1);
+      }
+      .hb.acc {
+        background: rgba(0, 122, 255, 0.14);
+        border-color: rgba(0, 122, 255, 0.28);
+        color: var(--blue2);
+      }
+      .hb.acc:hover {
+        background: rgba(0, 122, 255, 0.2);
+      }
+      .ham {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+        flex-direction: column;
+        gap: 4.5px;
+      }
+      .ham span {
+        display: block;
+        width: 18px;
+        height: 1.5px;
+        background: var(--t2);
+        border-radius: 2px;
+      }
+
+      /* LAYOUT */
+      #layout {
+        display: flex;
+        height: calc(100vh - var(--hh));
+      }
+
+      /* SIDEBAR */
+      #sidebar {
+        width: var(--sw);
+        min-width: var(--sw);
+        background: var(--glass);
+        backdrop-filter: var(--blur);
+        -webkit-backdrop-filter: var(--blur);
+        border-right: 1px solid var(--border);
+        overflow-y: auto;
+        padding: 14px 10px;
+        height: 100%;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+      }
+      #sidebar::-webkit-scrollbar {
+        width: 3px;
+      }
+      #sidebar::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 2px;
+      }
+      .slbl {
+        font-size: 10.5px;
+        font-weight: 500;
+        color: var(--t3);
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        padding: 8px 12px 5px;
+        display: block;
+      }
+      .si {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 8px 11px;
+        border-radius: var(--r3);
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: all 0.16s;
+        margin-bottom: 1px;
+      }
+      .si:hover {
+        background: var(--glass-hov);
+        border-color: var(--border);
+      }
+      .si.on {
+        background: var(--glass-act);
+        border-color: var(--border-act);
+      }
+      .sinum {
+        font-size: 10.5px;
+        font-family: "DM Mono", monospace;
+        color: var(--t3);
+        width: 18px;
+        flex-shrink: 0;
+      }
+      .siname {
+        flex: 1;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--t2);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .si.on .siname {
+        color: var(--blue2);
+      }
+      .sibar {
+        width: 32px;
+        height: 2.5px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 2px;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+      .sibar-f {
+        height: 100%;
+        background: var(--blue);
+        border-radius: 2px;
+        transition: width 0.4s;
+      }
+      .sipct {
+        font-size: 9.5px;
+        font-family: "DM Mono", monospace;
+        color: var(--t3);
+        width: 24px;
+        text-align: right;
+        flex-shrink: 0;
+      }
+
+      /* Módulo em destaque */
+      .si-hl {
+        background: rgba(0, 122, 255, 0.1);
+        border-color: rgba(0, 122, 255, 0.32) !important;
+        margin-bottom: 2px;
+      }
+      .si-hl .siname {
+        color: var(--blue2) !important;
+      }
+      .si-hl .sinum {
+        color: var(--blue2);
+      }
+      .si-hl .sibar-f {
+        background: var(--cyan);
+      }
+      .si-hl .sipct {
+        color: var(--blue2);
+      }
+
+      /* Botão retrátil da seção "Outros Módulos" */
+      .sib-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px 12px 5px;
+        font-size: 10.5px;
+        font-weight: 500;
+        color: var(--t3);
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        font-family: "DM Sans", sans-serif;
+        transition: color 0.15s;
+      }
+      .sib-toggle:hover {
+        color: var(--t2);
+      }
+      .sib-chv {
+        width: 12px;
+        height: 12px;
+        transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        flex-shrink: 0;
+      }
+      .sib-toggle.collapsed .sib-chv {
+        transform: rotate(-90deg);
+      }
+
+      /* MAIN */
+      #main {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 28px 32px;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+      }
+      #main::-webkit-scrollbar {
+        width: 3px;
+      }
+      #main::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 2px;
+      }
+
+      /* STATS */
+      .srow {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 11px;
+        margin-bottom: 22px;
+      }
+      .sc {
+        background: var(--glass);
+        backdrop-filter: var(--blur);
+        -webkit-backdrop-filter: var(--blur);
+        border: 1px solid var(--border);
+        border-radius: var(--r2);
+        padding: 16px 18px;
+        transition: all 0.2s;
+        position: relative;
+        overflow: hidden;
+      }
+      .sc::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(135deg, var(--shine) 0%, transparent 50%);
+        pointer-events: none;
+      }
+      .sc:hover {
+        border-color: var(--border-hi);
+        transform: translateY(-1px);
+      }
+      .sv {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -1px;
+        color: var(--blue2);
+      }
+      .sl {
+        font-size: 10.5px;
+        font-weight: 500;
+        color: var(--t3);
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+        margin-top: 3px;
+      }
+
+      /* PROGRESS BAR */
+      .pt {
+        height: 2.5px;
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 26px;
+      }
+      .pf {
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          var(--blue),
+          var(--cyan),
+          var(--green)
+        );
+        border-radius: 2px;
+        transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 0 6px rgba(0, 122, 255, 0.4);
+      }
+
+      /* MODULE CARDS */
+      .ml {
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+      }
+      .mc {
+        background: var(--glass);
+        backdrop-filter: var(--blur);
+        -webkit-backdrop-filter: var(--blur);
+        border: 1px solid var(--border);
+        border-radius: var(--r1);
+        overflow: hidden;
+        transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+      }
+      .mc::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 2.5px;
+        background: transparent;
+        border-radius: 3px 0 0 3px;
+        transition: background 0.3s;
+      }
+      .mc:hover {
+        border-color: var(--border-hi);
+      }
+      .mc.open {
+        border-color: rgba(0, 122, 255, 0.22);
+      }
+      .mc.open::after {
+        background: linear-gradient(180deg, var(--blue), var(--cyan));
+      }
+
+      .mhd {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 15px 19px;
+        cursor: pointer;
+        transition: background 0.14s;
+        user-select: none;
+      }
+      .mhd:hover {
+        background: rgba(255, 255, 255, 0.025);
+      }
+      .mnb {
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+        border-radius: 10px;
+        background: rgba(0, 122, 255, 0.1);
+        border: 1px solid rgba(0, 122, 255, 0.22);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--blue2);
+      }
+      .mt {
+        flex: 1;
+        min-width: 0;
+      }
+      .mt1 {
+        font-size: 13.5px;
+        font-weight: 600;
+        color: var(--t1);
+        letter-spacing: -0.2px;
+      }
+      .mt2 {
+        font-size: 11.5px;
+        color: var(--t2);
+        margin-top: 1px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .rw {
+        position: relative;
+        width: 42px;
+        height: 42px;
+        flex-shrink: 0;
+      }
+      .rw svg {
+        transform: rotate(-90deg);
+        display: block;
+      }
+      .rt {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.07);
+        stroke-width: 2.5;
+      }
+      .rf {
+        fill: none;
+        stroke: var(--blue2);
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        transition: stroke-dashoffset 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .rl {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "DM Mono", monospace;
+        font-size: 9px;
+        color: var(--blue2);
+      }
+      .chv {
+        width: 17px;
+        height: 17px;
+        flex-shrink: 0;
+        color: var(--t3);
+        transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .mc.open .chv {
+        transform: rotate(180deg);
+      }
+
+      /* BODY */
+      .mb {
+        border-top: 1px solid var(--border);
+        display: none;
+        animation: br 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+      @keyframes br {
+        from {
+          opacity: 0;
+          transform: translateY(-5px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .mc.open .mb {
+        display: block;
+      }
+
+      /* TABS */
+      .tbar {
+        display: flex;
+        border-bottom: 1px solid var(--border);
+        padding: 0 19px;
+      }
+      .tp {
+        padding: 9px 14px;
+        font-size: 11.5px;
+        font-weight: 500;
+        color: var(--t3);
+        border: none;
+        background: none;
+        cursor: pointer;
+        border-bottom: 1.5px solid transparent;
+        transition: all 0.14s;
+        font-family: "DM Sans", sans-serif;
+      }
+      .tp:hover {
+        color: var(--t2);
+      }
+      .tp.on {
+        color: var(--blue2);
+        border-bottom-color: var(--blue);
+      }
+      .tpane {
+        display: none;
+        padding: 17px 19px;
+      }
+      .tpane.on {
+        display: block;
+      }
+
+      /* TOPICS */
+      .tg {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .tr {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 12px;
+        background: rgba(255, 255, 255, 0.025);
+        border: 1px solid rgba(255, 255, 255, 0.055);
+        border-radius: var(--r3);
+        cursor: pointer;
+        transition: all 0.15s;
+        position: relative;
+        overflow: hidden;
+      }
+      .tr::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          rgba(0, 122, 255, 0.05) 0%,
+          transparent 100%
+        );
+        opacity: 0;
+        transition: opacity 0.18s;
+      }
+      .tr:hover {
+        border-color: rgba(255, 255, 255, 0.11);
+        background: rgba(255, 255, 255, 0.04);
+      }
+      .tr:hover::before {
+        opacity: 1;
+      }
+      .tr[data-s="done"] {
+        border-color: rgba(48, 209, 88, 0.18);
+      }
+      .tr[data-s="studying"] {
+        border-color: rgba(255, 214, 10, 0.18);
+      }
+      .tcb {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        border-radius: 5px;
+        border: 1.5px solid rgba(255, 255, 255, 0.14);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.17s;
+      }
+      .tr[data-s="done"] .tcb {
+        background: var(--green);
+        border-color: var(--green);
+        box-shadow: 0 0 8px rgba(48, 209, 88, 0.28);
+      }
+      .tr[data-s="studying"] .tcb {
+        background: var(--yellow);
+        border-color: var(--yellow);
+        box-shadow: 0 0 8px rgba(255, 214, 10, 0.25);
+      }
+      .tcb svg {
+        width: 10px;
+        height: 10px;
+        stroke: #fff;
+        stroke-width: 2.5;
+        fill: none;
+      }
+      .tcb .sdot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.45);
+      }
+      .tn {
+        flex: 1;
+        font-size: 12.5px;
+        color: var(--t1);
+        line-height: 1.35;
+      }
+      .tr[data-s="done"] .tn {
+        color: var(--t2);
+        text-decoration: line-through;
+      }
+      .stag {
+        font-size: 9.5px;
+        font-family: "DM Mono", monospace;
+        padding: 2px 7px;
+        border-radius: 999px;
+        flex-shrink: 0;
+        font-weight: 500;
+      }
+      .stag-pending {
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--t3);
+      }
+      .stag-studying {
+        background: rgba(255, 214, 10, 0.1);
+        color: var(--yellow);
+        border: 1px solid rgba(255, 214, 10, 0.18);
+      }
+      .stag-done {
+        background: rgba(48, 209, 88, 0.1);
+        color: var(--green);
+        border: 1px solid rgba(48, 209, 88, 0.18);
+      }
+      .ta {
+        display: flex;
+        gap: 7px;
+        margin-top: 11px;
+        flex-wrap: wrap;
+      }
+      .ab {
+        padding: 6px 13px;
+        border-radius: var(--r3);
+        font-size: 11.5px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.15s;
+        font-family: "DM Sans", sans-serif;
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--t2);
+      }
+      .ab:hover {
+        background: rgba(255, 255, 255, 0.07);
+        color: var(--t1);
+      }
+      .ab.danger {
+        border-color: rgba(255, 69, 58, 0.22);
+        color: rgba(255, 69, 58, 0.65);
+      }
+      .ab.danger:hover {
+        background: rgba(255, 69, 58, 0.09);
+        color: var(--red);
+      }
+
+      /* CHIPS */
+      .cc {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .ch {
+        padding: 4px 11px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 999px;
+        font-size: 11.5px;
+        color: var(--t2);
+        font-family: "DM Mono", monospace;
+        transition: all 0.15s;
+      }
+      .ch:hover {
+        background: rgba(0, 122, 255, 0.09);
+        border-color: rgba(0, 122, 255, 0.28);
+        color: var(--blue2);
+      }
+
+      /* DOD */
+      .dod {
+        background: rgba(0, 122, 255, 0.055);
+        border: 1px solid rgba(0, 122, 255, 0.14);
+        border-radius: var(--r2);
+        padding: 16px 18px;
+      }
+      .dodh {
+        font-size: 9.5px;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--blue2);
+        margin-bottom: 12px;
+        font-family: "DM Mono", monospace;
+      }
+      .dodl {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      .dodli {
+        display: flex;
+        align-items: flex-start;
+        gap: 9px;
+        font-size: 12.5px;
+        color: var(--t2);
+        line-height: 1.5;
+      }
+      .dodli span:first-child {
+        color: var(--blue);
+        font-family: "DM Mono", monospace;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .dodq {
+        margin-top: 14px;
+        padding: 11px 14px;
+        background: rgba(255, 255, 255, 0.03);
+        border-left: 2px solid var(--blue);
+        border-radius: 0 7px 7px 0;
+        font-size: 12px;
+        color: var(--t2);
+        font-style: italic;
+        line-height: 1.6;
+      }
+
+      /* CONNECTOR */
+      .mcon {
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .mcon::after {
+        content: "";
+        display: block;
+        width: 1.5px;
+        height: 100%;
+        background: linear-gradient(
+          180deg,
+          rgba(0, 122, 255, 0.18),
+          rgba(0, 122, 255, 0.04)
+        );
+      }
+
+      /* MODAL */
+      .mbg {
+        position: fixed;
+        inset: 0;
+        z-index: 800;
+        background: rgba(0, 0, 0, 0.58);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+      }
+      .mbg.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .msh {
+        width: 510px;
+        max-width: 94vw;
+        max-height: 90vh;
+        overflow-y: auto;
+        background: var(--glass);
+        backdrop-filter: var(--blur-hvy);
+        -webkit-backdrop-filter: var(--blur-hvy);
+        border: 1px solid var(--border-hi);
+        border-radius: 22px;
+        padding: 30px 26px;
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.48);
+        transform: scale(0.96) translateY(14px);
+        transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+      }
+      .mbg.open .msh {
+        transform: none;
+      }
+      .msh::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 22px;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.055) 0%,
+          transparent 40%
+        );
+        pointer-events: none;
+      }
+      .mtit {
+        font-size: 17px;
+        font-weight: 600;
+        letter-spacing: -0.3px;
+        margin-bottom: 22px;
+      }
+      .fg {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 13px;
+      }
+      .fl {
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--t2);
+        letter-spacing: 0.3px;
+      }
+      .fi {
+        background: rgba(255, 255, 255, 0.055);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        color: var(--t1);
+        border-radius: var(--r3);
+        padding: 9px 13px;
+        font-family: "DM Sans", sans-serif;
+        font-size: 13px;
+        outline: none;
+        transition: all 0.15s;
+      }
+      .fi:focus {
+        border-color: var(--blue);
+        background: rgba(0, 122, 255, 0.07);
+        box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.13);
+      }
+      textarea.fi {
+        min-height: 76px;
+        resize: vertical;
+      }
+      .mact {
+        display: flex;
+        gap: 9px;
+        margin-top: 20px;
+      }
+      .mb1 {
+        flex: 1;
+        background: var(--blue);
+        border: none;
+        border-radius: var(--r3);
+        color: #fff;
+        font-family: "DM Sans", sans-serif;
+        font-size: 13.5px;
+        font-weight: 600;
+        padding: 11px;
+        cursor: pointer;
+        transition: all 0.15s;
+        box-shadow: 0 4px 18px rgba(0, 122, 255, 0.32);
+      }
+      .mb1:hover {
+        opacity: 0.87;
+        transform: translateY(-1px);
+      }
+      .mb2 {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        color: var(--t2);
+        border-radius: var(--r3);
+        padding: 11px 18px;
+        font-size: 13.5px;
+        cursor: pointer;
+        transition: all 0.15s;
+        font-family: "DM Sans", sans-serif;
+      }
+      .mb2:hover {
+        background: rgba(255, 255, 255, 0.09);
+        color: var(--t1);
+      }
+
+      /* TOAST */
+      .toast {
+        position: fixed;
+        bottom: 26px;
+        right: 26px;
+        z-index: 9999;
+        background: var(--glass);
+        backdrop-filter: var(--blur-hvy);
+        -webkit-backdrop-filter: var(--blur-hvy);
+        border: 1px solid rgba(0, 122, 255, 0.28);
+        border-radius: var(--r2);
+        padding: 10px 16px;
+        font-size: 12.5px;
+        color: var(--blue2);
+        font-family: "DM Mono", monospace;
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.32);
+        transform: translateY(14px) scale(0.97);
+        opacity: 0;
+        transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+        pointer-events: none;
+      }
+      .toast.show {
+        transform: none;
+        opacity: 1;
+      }
+
+      /* OVERLAY */
+      #sibov {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 98;
+        background: rgba(0, 0, 0, 0.48);
+        backdrop-filter: blur(4px);
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 1024px) {
+        .srow {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 820px) {
+        #sidebar {
+          position: fixed;
+          top: var(--hh);
+          left: 0;
+          z-index: 99;
+          height: calc(100vh - var(--hh));
+          transform: translateX(-100%);
+          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #sidebar.open {
+          transform: translateX(0);
+          box-shadow: 16px 0 50px rgba(0, 0, 0, 0.38);
+        }
+        #sibov {
+          display: block;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.3s;
+        }
+        #sibov.open {
+          opacity: 1;
+          pointer-events: auto;
+        }
+        #main {
+          padding: 18px 14px;
+        }
+        .ham {
+          display: flex;
+        }
+      }
+      @media (max-width: 560px) {
+        .srow {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        header {
+          padding: 0 14px;
+        }
+        .pill {
+          display: none;
+        }
+      }
+
+      @keyframes fi {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .ani {
+        animation: fi 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="bg"></div>
+    <div id="grain"></div>
+
+    <!-- LOGIN -->
+    <div id="loginScreen">
+      <div class="lw">
+        <div class="licon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+          </svg>
+        </div>
+        <div class="lcard">
+          <div>
+            <div class="lt1">Architect's Roadmap</div>
+            <div class="lt2">Engenheiro de Software → Solution Architect</div>
+          </div>
+          <div><label class="llb">Código de Acesso</label></div>
+          <input
+            class="linput"
+            id="lpwd"
+            type="password"
+            placeholder="· · · · · · ·"
+            autocomplete="off"
+            maxlength="20"
+          />
+          <button class="lbtn" onclick="doLogin()">Entrar →</button>
+          <div class="lerr" id="lerr"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <!-- MODAL -->
+    <div class="mbg" id="modal">
+      <div class="msh">
+        <div class="mtit">Novo Módulo</div>
+        <div class="fg">
+          <label class="fl">Número do Módulo</label
+          ><input class="fi" id="mNum" type="number" placeholder="13" />
+        </div>
+        <div class="fg">
+          <label class="fl">Título</label
+          ><input class="fi" id="mTitle" placeholder="AI/ML para Arquitetos" />
+        </div>
+        <div class="fg">
+          <label class="fl">Foco</label
+          ><input class="fi" id="mFocus" placeholder="Objetivo principal..." />
+        </div>
+        <div class="fg">
+          <label class="fl">Tópicos (um por linha)</label
+          ><textarea
+            class="fi"
+            id="mTopics"
+            placeholder="Fundamentos de LLM&#10;Padrões RAG&#10;Bancos vetoriais"
+          ></textarea>
+        </div>
+        <div class="fg">
+          <label class="fl">Ferramentas (separadas por vírgula)</label
+          ><input
+            class="fi"
+            id="mTools"
+            placeholder="LangChain, Ollama, Pinecone"
+          />
+        </div>
+        <div class="fg">
+          <label class="fl">Livros / Fontes (um por linha)</label
+          ><textarea
+            class="fi"
+            id="mBooks"
+            placeholder="Designing ML Systems — Chip Huyen"
+          ></textarea>
+        </div>
+        <div class="fg">
+          <label class="fl">Definição de Pronto</label
+          ><textarea
+            class="fi"
+            id="mDod"
+            placeholder="Entregáveis para conclusão..."
+          ></textarea>
+        </div>
+        <div class="mact">
+          <button class="mb2" onclick="closeModal()">Cancelar</button
+          ><button class="mb1" onclick="saveModule()">Salvar Módulo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- APP -->
+    <div id="app">
+      <header>
+        <div class="brand">
+          <button class="ham" id="ham" onclick="toggleSidebar()">
+            <span></span><span></span><span></span>
+          </button>
+          <div class="bdot">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+                stroke="white"
+                fill="none"
+                stroke-width="2"
+              />
+            </svg>
+          </div>
+          <div class="bname">Skill Tree <em>/ Architect's Roadmap</em></div>
+        </div>
+        <div class="hr">
+          <div class="pill">
+            <div class="pill-dot"></div>
+            <span id="hpill">0 / 0</span>
+          </div>
+          <button class="hb acc" onclick="openModal()">+ Módulo</button>
+          <button class="hb" id="thbtn" onclick="toggleTheme()">☀</button>
+          <button class="hb" onclick="doLogout()">Sair</button>
+        </div>
+      </header>
+
+      <div id="sibov" onclick="closeSidebar()"></div>
+
+      <div id="layout">
+        <nav id="sidebar">
+          <div id="sib-destaque"></div>
+          <div id="sib-outros-wrap">
+            <button
+              class="sib-toggle"
+              id="sibToggleBtn"
+              onclick="toggleSibOutros()"
+            >
+              <span>Outros Módulos</span>
+              <svg
+                class="sib-chv"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            <div id="sibnav"></div>
+          </div>
+        </nav>
+        <main id="main">
+          <div class="srow" id="srow"></div>
+          <div class="pt"><div class="pf" id="pf" style="width: 0%"></div></div>
+          <div class="ml" id="ml"></div>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      /* ================================================
+   DATA
+================================================ */
+      const MODS_DEFAULT = [
+        {
+          id: 0,
+          title: "Reposicionamento Mental e Base de Execução",
+          focus:
+            "Parar de pensar como programador de feature e começar a pensar como responsável por sistemas, restrições e trade-offs.",
+          topics: [
+            "Diferença entre feature, componente, sistema e plataforma",
+            "Acoplamento, coesão, boundaries e ownership",
+            "Trade-offs: simplicidade vs flexibilidade; consistência vs disponibilidade",
+            "Arquitetura como conjunto de decisões sob restrição",
+            "Fitness functions e arquitetura evolutiva",
+            "ADRs, RFCs e documentação de decisão",
+            "Níveis C4: Context, Container, Component, Code",
+            "Thinking in systems: feedback loops, bottlenecks, failure propagation",
+            "Conway's Law e impacto da estrutura organizacional no sistema",
+          ],
+          tools: [
+            "C4 Model / Structurizr",
+            "ADR templates",
+            "Mermaid / PlantUML",
+            "Notion / Confluence",
+            "GitHub/GitLab para RFCs",
+          ],
+          books: [
+            "Software Architecture: The Hard Parts — Ford, Richards, Parsons, Kua",
+            "Fundamentals of Software Architecture — Mark Richards, Neal Ford",
+            "Building Evolutionary Architectures — Ford, Parsons, Kua",
+            "Team Topologies — Skelton, Pais",
+            "C4 Model / Structurizr docs",
+          ],
+          dod: [
+            "Diagrama C4 completo de um sistema real ou fictício",
+            "5 ADRs bem escritos",
+            "1 RFC propondo mudança arquitetural",
+            "Explicação formal dos principais trade-offs",
+            "Boundaries e ownership entre times",
+          ],
+          dodQuote:
+            "Se você não consegue escrever decisão clara, ainda não é arquiteto. É só alguém com opinião.",
+        },
+        {
+          id: 1,
+          title: "Fundamentos de Sistemas Distribuídos",
+          focus:
+            "Entender por que sistemas falham, escalam mal e geram comportamento emergente.",
+          topics: [
+            "Latência, throughput, concorrência, paralelismo",
+            "Consistência forte vs eventual",
+            "CAP, PACELC",
+            "Idempotência",
+            "Retries, backoff, jitter",
+            "Timeouts, circuit breakers, bulkheads",
+            "Distributed locks e quando não usar",
+            "Exactly-once como marketing, at-least-once na prática",
+            "Consensus: Raft em alto nível",
+            "Failure modes: split brain, thundering herd, cascading failure",
+            "Clock skew, monotonic clocks, logical clocks",
+            "Load shedding e graceful degradation",
+          ],
+          tools: [
+            "Redis",
+            "NATS / RabbitMQ / Kafka",
+            "Envoy / HAProxy / NGINX",
+            "Resilience4j / Polly / Istio patterns",
+            "Vegeta / k6 / wrk",
+          ],
+          books: [
+            "Designing Data-Intensive Applications — Martin Kleppmann",
+            "Distributed Systems — Maarten van Steen / Tanenbaum",
+            "Release It! — Michael Nygard",
+            "Google SRE book — overload e cascading failures",
+            "Papers: Dynamo, Bigtable, MapReduce",
+          ],
+          dod: [
+            "API síncrona + fila assíncrona construídas",
+            "Retries com idempotência implementados",
+            "Cache + rate limiting + circuit breaker + fallback",
+            "Falhas injetadas deliberadamente e comportamento documentado",
+          ],
+          dodQuote:
+            "Se você nunca quebrou seu próprio sistema deliberadamente, você ainda não entende sistema distribuído.",
+        },
+        {
+          id: 2,
+          title: "Data Architecture de Verdade",
+          focus:
+            "Sair do 'sei usar banco' para 'sei desenhar estratégia de dados'.",
+          topics: [
+            "Modelagem relacional vs documental vs key-value vs columnar vs graph",
+            "OLTP vs OLAP",
+            "B-Tree vs LSM Tree",
+            "Índices compostos, covering indexes, cardinalidade, selectividade",
+            "MVCC",
+            "Isolation levels, locking, deadlocks",
+            "Replicação síncrona vs assíncrona",
+            "Read replicas",
+            "Sharding e partitioning",
+            "CQRS",
+            "Event sourcing: quando faz sentido e quando é overengineering",
+            "CDC",
+            "Data retention, TTL, arquivamento",
+            "Cache-aside, write-through, write-behind",
+            "Materialized views",
+            "Schema evolution",
+            "Data contracts",
+          ],
+          tools: [
+            "PostgreSQL",
+            "MySQL",
+            "Redis",
+            "Elasticsearch / OpenSearch",
+            "ClickHouse ou BigQuery",
+            "Debezium",
+            "Kafka",
+            "S3/GCS/Azure Blob",
+          ],
+          books: [
+            "Designing Data-Intensive Applications — Kleppmann",
+            "Database Internals — Alex Petrov",
+            "Streaming Systems — Tyler Akidau et al.",
+            "PostgreSQL official docs",
+            "Papers: Bigtable, Dynamo, Spanner, Kafka",
+          ],
+          dod: [
+            "Banco transacional + cache + busca + analytics pipeline",
+            "CDC para eventos + retenção e arquivamento",
+            "Benchmark: consulta boa vs ruim documentado",
+          ],
+          dodQuote: null,
+        },
+        {
+          id: 3,
+          title: "Networking, Linux e Runtime",
+          focus:
+            "Parar de tratar rede e sistema operacional como 'magia do DevOps'.",
+          topics: [
+            "TCP/IP, DNS, TLS, HTTP/1.1, HTTP/2, HTTP/3 em nível prático",
+            "Reverse proxy, load balancer L4 vs L7",
+            "Connection pooling",
+            "NAT, subnets, routing básico",
+            "mTLS",
+            "Handshake TLS e implicações de performance",
+            "Linux process model",
+            "Threads, file descriptors, sockets",
+            "cgroups, namespaces, containers em nível conceitual e prático",
+            "Memory leaks, CPU saturation, I/O bound vs CPU bound",
+            "GC basics e impacto em latência",
+            "Epoll / event loops em alto nível",
+            "Profiling e debugging de processo",
+          ],
+          tools: [
+            "Linux",
+            "NGINX / Envoy / HAProxy",
+            "Docker",
+            "tcpdump, ss, netstat, lsof",
+            "strace, perf",
+            "Wireshark",
+            "OpenSSL CLI",
+            "hey / curl / dig / traceroute",
+          ],
+          books: [
+            "Computer Networking: A Top-Down Approach — Kurose/Ross",
+            "Systems Performance — Brendan Gregg",
+            "Understanding Linux Network Internals — O'Reilly",
+            "NGINX / Envoy docs",
+            "Docker docs",
+          ],
+          dod: [
+            "Aplicação atrás de reverse proxy com TLS funcionando",
+            "Handshake, pooling e keep-alive explicados",
+            "Diagnóstico de latência de rede vs gargalo de CPU",
+            "Postmortem técnico de incidente simulado",
+          ],
+          dodQuote: "Arquiteto que não entende rede vira refém de buzzword.",
+        },
+        {
+          id: 4,
+          title: "API, Integração e Contratos",
+          focus: "Modelar interfaces entre sistemas, não só endpoints.",
+          topics: [
+            "REST maduro vs RPC vs GraphQL vs async messaging",
+            "API versioning",
+            "Contract-first design",
+            "OpenAPI",
+            "Pagination, filtering, sorting",
+            "Idempotency keys",
+            "Webhooks",
+            "Sagas orquestradas vs coreografadas",
+            "Schema registry",
+            "Consumer-driven contracts",
+            "Anti-corruption layer",
+            "BFF",
+            "API gateway patterns",
+            "Rate limiting, quotas, abuse protection",
+            "Multi-tenant API concerns",
+          ],
+          tools: [
+            "OpenAPI / Swagger",
+            "AsyncAPI",
+            "GraphQL",
+            "Kafka / RabbitMQ / NATS",
+            "Kong / Apigee / AWS API Gateway",
+            "Pact",
+            "Temporal",
+          ],
+          books: [
+            "API Design Patterns — JJ Geewax",
+            "Enterprise Integration Patterns — Hohpe, Woolf",
+            "Microservices Patterns — Chris Richardson",
+            "OpenAPI / AsyncAPI docs",
+            "Temporal docs",
+          ],
+          dod: [
+            "API pública + integração assíncrona + webhook",
+            "Saga de pagamento/pedido com compensação",
+            "Contrato versionado + estratégia de erro e idempotência",
+            "Especificação OpenAPI + diagrama de sequência",
+          ],
+          dodQuote: null,
+        },
+        {
+          id: 5,
+          title: "Cloud Architecture e IaC",
+          focus:
+            "Aprender cloud como modelo arquitetural, não como catálogo de produto.",
+          topics: [
+            "Compute options: VM, containers, serverless",
+            "Object storage, block, file",
+            "VPC, subnet, security groups / firewall rules",
+            "IAM, roles, policies",
+            "Managed databases e messaging",
+            "Secrets management",
+            "HA vs DR — RTO, RPO",
+            "Multi-AZ vs multi-region",
+            "FinOps básico",
+            "Infra as Code e Immutable infrastructure",
+            "Drift e Golden images",
+            "Bootstrapping environments e Landing zones",
+            "Tagging strategy",
+          ],
+          tools: [
+            "AWS ou GCP (cloud principal)",
+            "Terraform / OpenTofu",
+            "Packer",
+            "Vault / AWS Secrets Manager",
+            "EC2, ECS/EKS, Lambda, RDS, S3, SQS/SNS",
+            "GKE, Cloud Run, Cloud SQL, Pub/Sub",
+          ],
+          books: [
+            "AWS Well-Architected Framework",
+            "Google Cloud Well-Architected Framework",
+            "Azure Well-Architected Framework",
+            "Cloud Architecture Patterns — Bill Wilder",
+            "Terraform: Up & Running — Yevgeniy Brikman",
+          ],
+          dod: [
+            "IaC: VPC, compute, banco, storage, IAM provisionados",
+            "Observabilidade mínima + pipeline de deploy",
+            "Ambientes dev/staging/prod separados",
+            "Documento com RTO/RPO + custos + justificativa",
+          ],
+          dodQuote: null,
+        },
+        {
+          id: 6,
+          title: "Containers, Kubernetes e Platform Engineering",
+          focus:
+            "Entender a camada operacional onde grande parte do software moderno roda.",
+          topics: [
+            "Imagens, camadas, build eficiente",
+            "Runtime de containers",
+            "Kubernetes primitives: Pod, Deployment, Service, ConfigMap, Secret, Ingress",
+            "Liveness, readiness, startup probes",
+            "Requests/limits e HPA",
+            "Scheduling básico",
+            "Stateful workloads e Persistent volumes",
+            "Network policies",
+            "Service mesh em nível de decisão",
+            "GitOps",
+            "Internal Developer Platform",
+            "Self-service platform e Golden paths",
+            "Software catalog",
+            "Policy-as-code e Platform as product",
+          ],
+          tools: [
+            "Docker",
+            "Kubernetes",
+            "Helm / Kustomize",
+            "Argo CD",
+            "Backstage",
+            "OPA / Gatekeeper / Kyverno",
+            "Istio / Linkerd",
+          ],
+          books: [
+            "Kubernetes Up & Running — Hightower, Burns, Beda",
+            "Platform Engineering — Camille Fournier et al.",
+            "Backstage docs",
+            "Argo CD docs",
+            "CNCF reports",
+          ],
+          dod: [
+            "Mini Internal Developer Platform montada",
+            "Catálogo de serviços + template de novo serviço",
+            "Deploy GitOps + observabilidade básica + policy mínima",
+            "Golden path para microserviço documentado",
+          ],
+          dodQuote:
+            "Se você só sabe 'subir no cluster', ainda está em nível de operador. Não de arquiteto.",
+        },
+        {
+          id: 7,
+          title: "Observabilidade, SRE e Operação",
+          focus: "Aprender a desenhar sistemas operáveis.",
+          topics: [
+            "Observability vs monitoring",
+            "Logs, metrics, traces",
+            "RED e USE methods",
+            "SLI, SLO, SLA",
+            "Error budgets",
+            "Alert fatigue",
+            "Runbooks e playbooks",
+            "Incident response",
+            "Postmortem sem teatro",
+            "Capacity planning",
+            "Performance budgets",
+            "Synthetic monitoring",
+            "Exemplars e correlação de sinais",
+            "Cardinalidade e custo de observabilidade",
+          ],
+          tools: [
+            "OpenTelemetry",
+            "Prometheus",
+            "Grafana",
+            "Loki",
+            "Tempo / Jaeger",
+            "Alertmanager",
+            "Datadog / New Relic / Dynatrace",
+          ],
+          books: [
+            "Site Reliability Engineering — Google",
+            "The Site Reliability Workbook — Google",
+            "Observability Engineering — Charity Majors et al.",
+            "OpenTelemetry docs",
+            "Brendan Gregg para performance",
+          ],
+          dod: [
+            "Sistema instrumentado com traces ponta a ponta",
+            "Métricas RED + dashboards úteis",
+            "3 alertas bem calibrados + 2 SLOs",
+            "Runbook + postmortem de incidente simulado",
+          ],
+          dodQuote: "Arquitetura sem operabilidade é decoração.",
+        },
+        {
+          id: 8,
+          title: "Segurança Aplicada à Arquitetura",
+          focus:
+            "Sair do discurso genérico de segurança e incorporar controles reais desde o design.",
+          topics: [
+            "Threat modeling",
+            "STRIDE e Attack surface",
+            "AuthN vs AuthZ",
+            "OAuth2, OIDC, JWT e seus riscos",
+            "Session management",
+            "Secrets management e Key rotation",
+            "Encryption at rest / in transit",
+            "Least privilege",
+            "RBAC vs ABAC",
+            "Supply chain security",
+            "SAST, DAST, SCA, container scanning",
+            "SBOM",
+            "Policy-as-code",
+            "Multi-tenant isolation",
+            "Zero Trust em nível pragmático",
+            "OWASP Top 10 e ASVS",
+            "Cloud misconfiguration e Security reviews",
+          ],
+          tools: [
+            "OWASP ASVS",
+            "Trivy / Grype",
+            "Snyk / Dependabot / GitHub Advanced Security",
+            "Vault / cloud secret managers",
+            "OPA / Kyverno",
+            "WAFs e API gateways",
+            "IAM nativo da cloud",
+          ],
+          books: [
+            "Security Engineering — Ross Anderson",
+            "Web Application Security — Andrew Hoffman",
+            "OWASP ASVS",
+            "OWASP Cheat Sheets",
+            "AWS/GCP/Azure security best practices",
+          ],
+          dod: [
+            "Threat model + trust boundaries + matriz de risco",
+            "Estratégia de IAM + controle de secrets",
+            "Pipeline com scanning completo",
+            "Checklist ASVS aplicado + compensating controls",
+          ],
+          dodQuote: null,
+        },
+        {
+          id: 9,
+          title: "Mensageria, Event-Driven e Workflows",
+          focus:
+            "Dominar coordenação entre serviços sem virar refém de síncrono.",
+          topics: [
+            "Message broker vs event log",
+            "Queue semantics e Ordering guarantees",
+            "Partitioning e Consumer groups",
+            "DLQ e Poison messages",
+            "Outbox pattern e Inbox pattern",
+            "Saga — Choreography vs orchestration",
+            "Workflow engines",
+            "Event versioning e Replay",
+            "Backpressure e Schema evolution",
+            "Exactly-once myth",
+            "Event-carried state transfer vs notification",
+          ],
+          tools: [
+            "Kafka",
+            "RabbitMQ",
+            "NATS",
+            "AWS SQS/SNS/EventBridge",
+            "GCP Pub/Sub",
+            "Azure Service Bus / Event Grid",
+            "Temporal",
+          ],
+          books: [
+            "Designing Event-Driven Systems — Ben Stopford",
+            "Enterprise Integration Patterns",
+            "Streaming Systems",
+            "Kafka docs",
+            "Temporal docs",
+          ],
+          dod: [
+            "Fluxo: pedido → estoque → pagamento → emissão → compensação",
+            "Garantias de entrega + estratégia de reprocessamento",
+            "Política de DLQ + decisão orquestração vs coreografia",
+          ],
+          dodQuote: null,
+        },
+        {
+          id: 10,
+          title: "Domain Modeling e Arquitetura de Aplicação",
+          focus: "Saber quando quebrar sistema e quando não quebrar.",
+          topics: [
+            "DDD estratégico",
+            "Bounded Context e Ubiquitous Language",
+            "Aggregates e Domain events",
+            "Transaction boundaries",
+            "Hexagonal / Clean / Onion",
+            "Modular monolith vs microservices",
+            "When not to use microservices",
+            "Architectural seams",
+            "Anti-corruption layer e Strangler Fig",
+            "Legacy modernization",
+            "Shared database anti-pattern",
+            "Multi-tenant domain concerns",
+          ],
+          tools: [
+            "Structurizr / ADRs",
+            "Monorepo ou multirepo",
+            "Contract tests",
+            "Feature flags",
+          ],
+          books: [
+            "Domain-Driven Design — Eric Evans",
+            "Implementing Domain-Driven Design — Vaughn Vernon",
+            "Monolith to Microservices — Sam Newman",
+            "Building Microservices — Sam Newman",
+            "Working Effectively with Legacy Code — Michael Feathers",
+          ],
+          dod: [
+            "Duas propostas para domínio real: modular monolith + microservices",
+            "Para cada: boundaries, transações, falhas, custo operacional",
+            "Time ownership + ponto provável de ruptura documentados",
+          ],
+          dodQuote: "Isso separa arquiteto de decorador de diagrama.",
+        },
+        {
+          id: 11,
+          title: "Performance, Custo e Capacidade",
+          focus: "Aprender a tomar decisão com impacto financeiro e de escala.",
+          topics: [
+            "Throughput vs latency",
+            "P50/P95/P99 e Tail latency",
+            "Queues e Caching layers",
+            "Connection pool exhaustion",
+            "Autoscaling — Horizontal vs vertical scaling",
+            "Capacity planning",
+            "Cost modeling e FinOps",
+            "Load test design",
+            "Bottleneck analysis",
+            "Memory/CPU/network saturation",
+            "Cost per request / per tenant / per workflow",
+            "Performance regression analysis",
+          ],
+          tools: [
+            "k6 / Locust / Vegeta",
+            "Grafana / Prometheus",
+            "Cloud cost explorers",
+            "Profilers",
+            "Redis / CDN / edge caching",
+            "Autoscaling policies",
+          ],
+          books: [
+            "Systems Performance — Brendan Gregg",
+            "Web Scalability for Startup Engineers — Artur Ejsmont",
+            "Google SRE — capacity planning chapters",
+            "FinOps Foundation materiais introdutórios",
+          ],
+          dod: [
+            "Baseline de performance de um sistema escolhido",
+            "Gargalos identificados + plano de otimização",
+            "Custo estimado antes/depois com justificativa quantitativa",
+          ],
+          dodQuote: "Sem número, você não fez arquitetura. Fez narrativa.",
+        },
+        {
+          id: 12,
+          title: "Liderança Técnica, Influência e Carreira",
+          focus: "Virar arquiteto que move organização, não apenas software.",
+          topics: [
+            "Technical strategy",
+            "RFC facilitation e Stakeholder management",
+            "Buy vs build e Prioritization",
+            "Architecture review process",
+            "Non-functional requirements",
+            "Technical debt taxonomy",
+            "Governance leve, não burocracia",
+            "Team Topologies e Platform as product",
+            "Communication: engineers vs managers vs executives",
+            "Postmortem culture",
+            "Mentoring e multiplicação técnica",
+            "Decision logs e Portfolio de arquitetura",
+          ],
+          tools: [
+            "ADR/RFC workflow em Git",
+            "Review boards enxutos",
+            "Scorecards arquiteturais",
+            "Service catalog",
+            "Docs versionados",
+            "Roadmaps técnicos",
+          ],
+          books: [
+            "Staff Engineer — Will Larson",
+            "The Manager's Path — Camille Fournier",
+            "Team Topologies",
+            "DORA materials",
+            "Accelerate — Forsgren, Humble, Kim",
+          ],
+          dod: [
+            "3 casos de system design",
+            "2 propostas de modernização",
+            "1 plataforma interna/golden path",
+            "1 security review + 1 incident review",
+            "1 cost optimization case + RFCs e ADRs publicados",
+          ],
+          dodQuote:
+            "Esse material precisa estar apresentável para entrevista, promoção interna e conversa com liderança.",
+        },
+      ];
+
+      /* ================================================
+   STATE
+================================================ */
+      const SK = "archmap_v4";
+      let S = { ts: {}, mods: [] };
+      function loadS() {
+        try {
+          const r = localStorage.getItem(SK);
+          if (r) S = JSON.parse(r);
+          if (!S.ts) S.ts = {};
+          if (!S.mods || !S.mods.length)
+            S.mods = JSON.parse(JSON.stringify(MODS_DEFAULT));
+        } catch (e) {
+          S = { ts: {}, mods: JSON.parse(JSON.stringify(MODS_DEFAULT)) };
+        }
+      }
+      function saveS() {
+        localStorage.setItem(SK, JSON.stringify(S));
+      }
+
+      /* ================================================
+   AUTH
+================================================ */
+      const PWD = "7355608";
+      function doLogin() {
+        const v = document.getElementById("lpwd").value.trim();
+        if (v === PWD) {
+          document.getElementById("loginScreen").style.display = "none";
+          document.getElementById("app").style.display = "block";
+          renderAll();
+        } else {
+          const e = document.getElementById("lerr");
+          e.textContent = "Código incorreto";
+          document.getElementById("lpwd").value = "";
+          document.getElementById("lpwd").focus();
+          setTimeout(() => (e.textContent = ""), 2200);
+        }
+      }
+      function doLogout() {
+        document.getElementById("app").style.display = "none";
+        document.getElementById("loginScreen").style.display = "flex";
+        document.getElementById("lpwd").value = "";
+      }
+      document.getElementById("lpwd").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") doLogin();
+      });
+
+      /* ================================================
+   THEME
+================================================ */
+      let dark = true;
+      function toggleTheme() {
+        dark = !dark;
+        document.documentElement.classList.toggle("light", !dark);
+        document.getElementById("thbtn").textContent = dark ? "☀" : "🌙";
+      }
+
+      /* ================================================
+   HELPERS
+================================================ */
+      function tkey(m, i) {
+        return `m${m}_t${i}`;
+      }
+      function tstat(m, i) {
+        return S.ts[tkey(m, i)] || "pending";
+      }
+      function mpct(mId, len) {
+        if (!len) return 0;
+        let d = 0;
+        for (let i = 0; i < len; i++) if (tstat(mId, i) === "done") d++;
+        return Math.round((d / len) * 100);
+      }
+      function gstats() {
+        let tot = 0,
+          done = 0,
+          studying = 0;
+        S.mods.forEach((m) =>
+          m.topics.forEach((_, i) => {
+            tot++;
+            const s = tstat(m.id, i);
+            if (s === "done") done++;
+            else if (s === "studying") studying++;
+          }),
+        );
+        return {
+          tot,
+          done,
+          studying,
+          pct: tot ? Math.round((done / tot) * 100) : 0,
+        };
+      }
+      const CIRC = 2 * Math.PI * 17;
+
+      /* ================================================
+   RENDER
+================================================ */
+      function renderAll() {
+        renderMods();
+        renderSidebar();
+        updateStats();
+      }
+
+      function renderMods() {
+        const ml = document.getElementById("ml");
+        ml.innerHTML = "";
+        S.mods.forEach((m, i) => {
+          if (i > 0) {
+            const c = document.createElement("div");
+            c.className = "mcon";
+            ml.appendChild(c);
+          }
+          const el = buildCard(m);
+          el.style.animationDelay = i * 0.04 + "s";
+          ml.appendChild(el);
+        });
+      }
+
+      function buildCard(m) {
+        const pct = mpct(m.id, m.topics.length);
+        const off = (CIRC - (CIRC * pct) / 100).toFixed(1);
+        const d = document.createElement("div");
+        d.className = "mc ani";
+        d.id = `mc-${m.id}`;
+        d.innerHTML = `
+    <div class="mhd" onclick="toggleCard(${m.id})">
+      <div class="mnb">M${m.id}</div>
+      <div class="mt"><div class="mt1">${m.title}</div><div class="mt2">${m.focus}</div></div>
+      <div class="rw">
+        <svg width="42" height="42" viewBox="0 0 42 42">
+          <circle class="rt" cx="21" cy="21" r="17"/>
+          <circle class="rf" id="rf-${m.id}" cx="21" cy="21" r="17" stroke-dasharray="${CIRC.toFixed(1)}" stroke-dashoffset="${off}"/>
+        </svg>
+        <div class="rl" id="rl-${m.id}">${pct}%</div>
+      </div>
+      <svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="mb">
+      <div class="tbar">
+        <button class="tp on" onclick="swTab(event,${m.id},'topics')">Tópicos</button>
+        <button class="tp" onclick="swTab(event,${m.id},'tools')">Ferramentas</button>
+        <button class="tp" onclick="swTab(event,${m.id},'books')">Fontes</button>
+        <button class="tp" onclick="swTab(event,${m.id},'dod')">DoD</button>
+      </div>
+      <div class="tpane on" id="tp-${m.id}-topics">
+        <div class="tg" id="tg-${m.id}">${m.topics.map((t, i) => trow(m.id, i, t)).join("")}</div>
+        <div class="ta">
+          <button class="ab" onclick="addTopic(${m.id})">+ Tópico</button>
+          <button class="ab danger" onclick="delMod(${m.id})">Remover módulo</button>
+        </div>
+      </div>
+      <div class="tpane" id="tp-${m.id}-tools"><div class="cc">${m.tools.map((t) => `<span class="ch">${t}</span>`).join("")}</div></div>
+      <div class="tpane" id="tp-${m.id}-books"><div class="cc">${m.books.map((b) => `<span class="ch" style="font-size:11px">${b}</span>`).join("")}</div></div>
+      <div class="tpane" id="tp-${m.id}-dod">
+        <div class="dod">
+          <div class="dodh">// Definição de Pronto</div>
+          <div class="dodl">${m.dod.map((d) => `<div class="dodli"><span>→</span><span>${d}</span></div>`).join("")}</div>
+          ${m.dodQuote ? `<div class="dodq">"${m.dodQuote}"</div>` : ""}
+        </div>
+      </div>
+    </div>`;
+        return d;
+      }
+
+      function trow(mId, idx, text) {
+        const s = tstat(mId, idx);
+        const ico =
+          s === "done"
+            ? `<svg viewBox="0 0 12 12"><polyline points="1,6 5,10 11,2" stroke="white" stroke-width="2.5" fill="none"/></svg>`
+            : s === "studying"
+              ? `<div class="sdot"></div>`
+              : "";
+        return `<div class="tr" data-s="${s}" id="tr-${mId}-${idx}" onclick="cyc(${mId},${idx})"><div class="tcb">${ico}</div><div class="tn">${text}</div><span class="stag stag-${s}">${s === "pending" ? "pendente" : s === "studying" ? "estudando" : "concluído"}</span></div>`;
+      }
+
+      function cyc(mId, idx) {
+        const cur = tstat(mId, idx);
+        S.ts[tkey(mId, idx)] =
+          cur === "pending"
+            ? "studying"
+            : cur === "studying"
+              ? "done"
+              : "pending";
+        saveS();
+        const row = document.getElementById(`tr-${mId}-${idx}`);
+        if (row) {
+          const mod = S.mods.find((m) => m.id === mId);
+          const tmp = document.createElement("div");
+          tmp.innerHTML = trow(mId, idx, mod.topics[idx]);
+          row.replaceWith(tmp.firstElementChild);
+        }
+        updRing(mId);
+        updateStats();
+        updSib(mId);
+      }
+
+      function updRing(mId) {
+        const mod = S.mods.find((m) => m.id === mId);
+        if (!mod) return;
+        const pct = mpct(mId, mod.topics.length);
+        const rf = document.getElementById(`rf-${mId}`);
+        const rl = document.getElementById(`rl-${mId}`);
+        if (rf)
+          rf.setAttribute(
+            "stroke-dashoffset",
+            (CIRC - (CIRC * pct) / 100).toFixed(1),
+          );
+        if (rl) rl.textContent = pct + "%";
+      }
+
+      function updateStats() {
+        const g = gstats();
+        document.getElementById("hpill").textContent = `${g.done} / ${g.tot}`;
+        document.getElementById("pf").style.width = g.pct + "%";
+        document.getElementById("srow").innerHTML = `
+    <div class="sc ani"><div class="sv">${S.mods.length}</div><div class="sl">Módulos</div></div>
+    <div class="sc ani"><div class="sv" style="color:var(--green)">${g.done}</div><div class="sl">Concluídos</div></div>
+    <div class="sc ani"><div class="sv" style="color:var(--yellow)">${g.studying}</div><div class="sl">Estudando</div></div>
+    <div class="sc ani"><div class="sv">${g.pct}%</div><div class="sl">Progresso</div></div>`;
+      }
+
+      function renderSidebar() {
+        // Determina o módulo em destaque: o que tem tópico em 'studying', ou M0
+        const activeMod =
+          S.mods.find((m) =>
+            m.topics.some((_, i) => tstat(m.id, i) === "studying"),
+          ) || S.mods[0];
+
+        // Renderiza destaque
+        const dest = document.getElementById("sib-destaque");
+        dest.innerHTML = "";
+        if (activeMod) {
+          const pct = mpct(activeMod.id, activeMod.topics.length);
+          const label = dest.appendChild(document.createElement("span"));
+          label.className = "slbl";
+          label.textContent = "Em Andamento";
+          const d = document.createElement("div");
+          d.className = "si si-hl";
+          d.id = `sib-${activeMod.id}`;
+          d.innerHTML = `<span class="sinum">M${activeMod.id}</span><span class="siname">${activeMod.title}</span><div class="sibar"><div class="sibar-f" style="width:${pct}%"></div></div><span class="sipct">${pct}%</span>`;
+          d.onclick = () => {
+            scrollToMod(activeMod.id);
+            closeSidebar();
+          };
+          dest.appendChild(d);
+        }
+
+        // Renderiza outros
+        const nav = document.getElementById("sibnav");
+        nav.innerHTML = "";
+        S.mods.forEach((m) => {
+          if (activeMod && m.id === activeMod.id) return; // pula o em destaque
+          const pct = mpct(m.id, m.topics.length);
+          const d = document.createElement("div");
+          d.className = "si";
+          d.id = `sib-${m.id}`;
+          d.innerHTML = `<span class="sinum">M${m.id}</span><span class="siname">${m.title}</span><div class="sibar"><div class="sibar-f" style="width:${pct}%"></div></div><span class="sipct">${pct}%</span>`;
+          d.onclick = () => {
+            scrollToMod(m.id);
+            closeSidebar();
+          };
+          nav.appendChild(d);
+        });
+
+        // Atualiza label do toggle
+        const wrap = document.getElementById("sib-outros-wrap");
+        if (wrap) {
+          const count = S.mods.length - (activeMod ? 1 : 0);
+          const span = wrap.querySelector(".sib-toggle span");
+          if (span) span.textContent = `Outros Módulos (${count})`;
+        }
+      }
+
+      function updSib(mId) {
+        const pct = mpct(
+          mId,
+          S.mods.find((m) => m.id === mId)?.topics.length || 0,
+        );
+        // pode haver duas instâncias do id (destaque + lista), update ambas
+        document
+          .querySelectorAll(`#sib-${mId} .sibar-f`)
+          .forEach((el) => (el.style.width = pct + "%"));
+        document
+          .querySelectorAll(`#sib-${mId} .sipct`)
+          .forEach((el) => (el.textContent = pct + "%"));
+        // re-renderiza sidebar para atualizar qual módulo está em destaque
+        renderSidebar();
+      }
+
+      /* ================================================
+   INTERACTIONS
+================================================ */
+      function toggleCard(id) {
+        document.getElementById(`mc-${id}`)?.classList.toggle("open");
+      }
+      function scrollToMod(id) {
+        const el = document.getElementById(`mc-${id}`);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          if (!el.classList.contains("open")) el.classList.add("open");
+        }
+      }
+      function swTab(e, mId, name) {
+        const mb = document.getElementById(`mc-${mId}`)?.querySelector(".mb");
+        if (!mb) return;
+        mb.querySelectorAll(".tp").forEach((b) => b.classList.remove("on"));
+        mb.querySelectorAll(".tpane").forEach((p) => p.classList.remove("on"));
+        e.currentTarget.classList.add("on");
+        document.getElementById(`tp-${mId}-${name}`)?.classList.add("on");
+      }
+
+      /* ================================================
+   MODULE MGMT
+================================================ */
+      function openModal() {
+        document.getElementById("modal").classList.add("open");
+      }
+      function closeModal() {
+        document.getElementById("modal").classList.remove("open");
+      }
+      document.getElementById("modal").addEventListener("click", (e) => {
+        if (e.target === document.getElementById("modal")) closeModal();
+      });
+
+      function saveModule() {
+        const num = parseInt(document.getElementById("mNum").value);
+        const title = document.getElementById("mTitle").value.trim();
+        if (!title) {
+          showToast("Título obrigatório");
+          return;
+        }
+        const newM = {
+          id: isNaN(num) ? Date.now() : num,
+          title,
+          focus: document.getElementById("mFocus").value.trim(),
+          topics: document
+            .getElementById("mTopics")
+            .value.split("\n")
+            .map((s) => s.trim())
+            .filter(Boolean),
+          tools: document
+            .getElementById("mTools")
+            .value.split(",")
+            .map((s) => s.trim())
+            .filter(Boolean),
+          books: document
+            .getElementById("mBooks")
+            .value.split("\n")
+            .map((s) => s.trim())
+            .filter(Boolean),
+          dod: document
+            .getElementById("mDod")
+            .value.split("\n")
+            .map((s) => s.trim())
+            .filter(Boolean),
+          dodQuote: null,
+        };
+        S.mods.push(newM);
+        S.mods.sort((a, b) => a.id - b.id);
+        saveS();
+        closeModal();
+        renderAll();
+        showToast(`Módulo "${title}" adicionado`);
+        [
+          "mNum",
+          "mTitle",
+          "mFocus",
+          "mTopics",
+          "mTools",
+          "mBooks",
+          "mDod",
+        ].forEach((id) => (document.getElementById(id).value = ""));
+      }
+
+      function delMod(mId) {
+        if (!confirm("Remover este módulo?")) return;
+        S.mods = S.mods.filter((m) => m.id !== mId);
+        saveS();
+        renderAll();
+        showToast("Módulo removido");
+      }
+
+      function addTopic(mId) {
+        const text = prompt("Nome do novo tópico:");
+        if (!text?.trim()) return;
+        const mod = S.mods.find((m) => m.id === mId);
+        if (!mod) return;
+        mod.topics.push(text.trim());
+        saveS();
+        const grid = document.getElementById(`tg-${mId}`);
+        if (grid) {
+          const idx = mod.topics.length - 1;
+          const tmp = document.createElement("div");
+          tmp.innerHTML = trow(mId, idx, mod.topics[idx]);
+          grid.appendChild(tmp.firstElementChild);
+        }
+        updateStats();
+        showToast("Tópico adicionado");
+      }
+
+      /* ================================================
+   SIDEBAR MOBILE
+================================================ */
+      function toggleSidebar() {
+        document.getElementById("sidebar").classList.toggle("open");
+        document.getElementById("sibov").classList.toggle("open");
+      }
+      function closeSidebar() {
+        document.getElementById("sidebar").classList.remove("open");
+        document.getElementById("sibov").classList.remove("open");
+      }
+      let _sibOutrosOpen = true;
+      function toggleSibOutros() {
+        _sibOutrosOpen = !_sibOutrosOpen;
+        const nav = document.getElementById("sibnav");
+        const btn = document.getElementById("sibToggleBtn");
+        if (nav) nav.style.display = _sibOutrosOpen ? "" : "none";
+        if (btn) btn.classList.toggle("collapsed", !_sibOutrosOpen);
+      }
+
+      /* ================================================
+   TOAST
+================================================ */
+      let _tt;
+      function showToast(msg) {
+        const t = document.getElementById("toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        clearTimeout(_tt);
+        _tt = setTimeout(() => t.classList.remove("show"), 2800);
+      }
+
+      /* ================================================
+   INIT
+================================================ */
+      loadS();
+      updateStats &&
+        renderAll &&
+        document.getElementById("app").style.display === "block" &&
+        renderAll();
+    </script>
+  </body>
+</html>
